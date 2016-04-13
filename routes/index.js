@@ -5,5 +5,12 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
+router.get('/:groupurl/mainview', function (req, res, next) {
+    console.log(req.params.groupurl + ' visited');
+    res.render('mainview', {
+        groupname: req.params.groupurl, 
+        list: [{week: 10, name: 'Mattias'}, {week: 11, name: 'Kalle'}]
+    });
+});
 
 module.exports = router;
