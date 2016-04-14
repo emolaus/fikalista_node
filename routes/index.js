@@ -5,6 +5,7 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
+
 router.get('/:groupurl/mainview', function (req, res, next) {
     console.log(req.params.groupurl + ' visited');
     res.render('mainview', {
