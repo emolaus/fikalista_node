@@ -1,17 +1,20 @@
 doctype html
-html(lang='en')
+html(lang='en', ng-app='mainview', ng-init='groupurl = "#{groupurl}"')
 head
   title=fikalistan
   meta(charset='utf-8' name='viewport' content='width=device-width, initial-scale=1')
   link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css")
-  script(src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous")
-  // script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js")
-  script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js")
-  script(src="/javascripts/mainview.js")
-body
+  //script(src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous")
+  
+
+body(ng-controller="MainController")
   .container-fluid 
     h1 #{groupname}
     ul.list-group
       li.list-group-item #{list[0].week} #{list[0].name} 
       li.list-group-item #{list[1].week} #{list[1].name} 
-      
+
+  script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js")
+  script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js")
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.4/angular.min.js')
+  script(src="/javascripts/mainview.js")

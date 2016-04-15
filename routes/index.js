@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 router.get('/:groupurl/mainview', function (req, res, next) {
     console.log(req.params.groupurl + ' visited');
     res.render('mainview', {
-        groupname: req.params.groupurl, 
+        groupurl: req.params.groupurl, 
         list: [{week: 10, name: 'Mattias'}, {week: 11, name: 'Kalle'}]
     });
 });
