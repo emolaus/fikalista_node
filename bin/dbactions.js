@@ -23,7 +23,7 @@ dbactions.getUsersFromGroupUrl = function(db, groupurl, successCallback, errorCa
         errorCallback(err);
         return;
       }
-      successCallback(res);
+      successCallback(res, group);
     });
   });
 };

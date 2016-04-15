@@ -13,21 +13,13 @@ body(ng-controller="MainController")
     //.row
     //  ul(class='list-group' ng-repeat='user in users') 
     //    li.list-group-item {{user.name}}
-    
-    ul.list-group
-      each val in [1, 2, 3, 4, 5]
-        li.list-group-item= val
+    h1 #{groupname}    
     ul.list-group
       each val in list
         li.list-group-item
           div= val.week
           div= val.name
     
-        
-    ul(class='list-group')
-      li.list-group-item a
-      li.list-group-item b 
-
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js")
   script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js")
   script(src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.4/angular.min.js')

@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 
 var dbactions = require('../bin/dbactions');
-console.log('restapi cached db');
 
 router.get('/groups', function (req, res, next) {
   req.db.all('SELECT * FROM groups;', function (err, data) {

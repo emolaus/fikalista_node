@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //app.use('/', express.static(__dirname + "/public"));
 
 // Make our db accessible to our router.
-// Adding the db object to every req is not optimal but good for quick n dirty.
+// Adding the db object to every req is maybe not optimal but nice having one handle over the entire app.
 app.use(function(req,res,next){
     req.db = db;
     next();
