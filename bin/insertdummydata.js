@@ -1,8 +1,8 @@
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('data/database.db');
 
-db.run("INSERT INTO groups (name, url_name) VALUES ('11223', '11223')");
-db.run("INSERT INTO groups (name, url_name) VALUES ('34567', 'mygroup')");
+db.run("INSERT INTO groups (name, groupurl) VALUES ('11223', '11223')");
+db.run("INSERT INTO groups (name, groupurl) VALUES ('34567', 'mygroup')");
 
 db.run("INSERT INTO users (groupid, name) VALUES (1, 'Ada')");
 db.run("INSERT INTO users (groupid, name) VALUES (1, 'Beda')");

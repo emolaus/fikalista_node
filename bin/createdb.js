@@ -4,7 +4,7 @@ var db = new sqlite3.Database('data/database.db');
 db.run("CREATE TABLE groups (" + 
         "groupid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," + 
         "name TEXT NOT NULL," +
-        "url_name TEXT NOT NULL UNIQUE," +
+        "groupurl TEXT NOT NULL UNIQUE," +
         "pincode TEXT DEFAULT '0000'," + 
         "creation_time INTEGER DEFAULT CURRENT_TIMESTAMP NOT NULL" +
         ")");
