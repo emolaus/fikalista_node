@@ -8,6 +8,9 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var restapi = require('./routes/restapi');
 
+var sqlite3 = require('sqlite3').verbose();
+var db = new sqlite3.Database('data/database.db');
+
 var app = express();
 
 // view engine setup
@@ -23,6 +26,13 @@ app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, 'public')));
 //app.use('/', express.static(__dirname + "/public"));
+
+// Make our db accessible to our router.
+// Adding the db object to every req is not optimal but good for quick n dirty.
+app.use(function(req,res,next){
+    req.db = db;
+    next();
+});
 
 app.use('/', routes);
 app.use('/restapi', restapi);

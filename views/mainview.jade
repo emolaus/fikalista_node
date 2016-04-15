@@ -9,10 +9,24 @@ head
 
 body(ng-controller="MainController")
   .container-fluid 
-    h1 #{groupname}
+    //h1 #{groupname}
+    //.row
+    //  ul(class='list-group' ng-repeat='user in users') 
+    //    li.list-group-item {{user.name}}
+    
     ul.list-group
-      li.list-group-item #{list[0].week} #{list[0].name} 
-      li.list-group-item #{list[1].week} #{list[1].name} 
+      each val in [1, 2, 3, 4, 5]
+        li.list-group-item= val
+    ul.list-group
+      each val in list
+        li.list-group-item
+          div= val.week
+          div= val.name
+    
+        
+    ul(class='list-group')
+      li.list-group-item a
+      li.list-group-item b 
 
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js")
   script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js")

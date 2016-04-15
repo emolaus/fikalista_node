@@ -2,6 +2,16 @@
   var app = angular.module('mainview', []);
 
   app.controller('MainController', ['$scope', '$http', '$window', function ($scope, $http, $window){
+    $scope.users = [];
+    $http.get('/restapi/users/' + $scope.groupurl).then(
+      function success(userObject) {
+        $scope.users = userObject.data;
+      },
+      function error(msg) {
+        console.log('Error:');
+        console.log(msg);
+      }
+    );
     /*$scope.instanceCount = 1;
     $scope.showForm = true;
     $scope.selectedClass = 'bla bla';
