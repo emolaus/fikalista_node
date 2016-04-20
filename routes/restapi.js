@@ -6,7 +6,7 @@ var weeklogic = require('../bin/weeklogic');
 
 router.get('/weeklist/:groupurl', function (req, res) {
   console.log('/weekexceptions/:groupurl/:year/:week');
-  weeklogic.attachWeeks(req.db, req.params.groupurl,
+  weeklogic.userListWithWeeks(req.db, req.params.groupurl,
   function successCallback(list) {
     res.send(list);
   },

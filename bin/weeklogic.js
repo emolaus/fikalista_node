@@ -1,7 +1,7 @@
 var weeklogic = {};
 var dbactions = require('../bin/dbactions');
 var currentWeekNumber = require('current-week-number');
-weeklogic.attachWeeks = function(db, groupurl, successCallback, errorCallback) {
+weeklogic.userListWithWeeks = function(db, groupurl, successCallback, errorCallback) {
   // Get group id
   dbactions.getGroup(db, groupurl, function success(group) {
     dbactions.getUsersFromGroupUrl(db, groupurl, function success(users) {
