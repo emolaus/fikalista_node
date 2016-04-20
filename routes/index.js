@@ -2,14 +2,13 @@ var express = require('express');
 var router = express.Router();
 
 var dbactions = require('../bin/dbactions');
-
+var weeklogic = require('../bin/weeklogic');
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
 router.get('/:groupurl/mainview', function (req, res, next) {
-    console.log(req.params.groupurl + ' visited');
     dbactions.getUsersFromGroupUrl(
     req.db, 
     req.params.groupurl, 

@@ -3,6 +3,16 @@ var router = express.Router();
 
 var dbactions = require('../bin/dbactions');
 
+router.get('/group/:groupurl', function (req, res) {
+  dbactions.getGroup(req.db, req.params.groupurl,
+  function success(group) {
+    res.send(group);
+  },
+  function error() {
+    res.send();
+  });
+});
+
 router.get('/groups', function (req, res, next) {
   req.db.all('SELECT * FROM groups;', function (err, data) {
     if (err) {
