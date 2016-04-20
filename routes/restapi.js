@@ -2,6 +2,28 @@ var express = require('express');
 var router = express.Router();
 
 var dbactions = require('../bin/dbactions');
+var weeklogic = require('../bin/weeklogic');
+
+router.get('/weeklist/:groupurl', function (req, res) {
+  console.log('/weekexceptions/:groupurl/:year/:week');
+  weeklogic.attachWeeks(req.db, req.params.groupurl,
+  function successCallback(list) {
+    res.send(list);
+  },
+  function error() {
+    res.send();
+  });  
+});
+router.get('/weekexceptions/:groupurl/:year/:week', function (req, res) {
+  console.log('/weekexceptions/:groupurl/:year/:week');
+  dbactions.getWeekExceptions(req.db, req.params.groupurl, req.params.year, req.params.week, 
+  function success(list) {
+    res.send(list);
+  }, 
+  function error() {
+    res.send();
+  });
+});
 
 router.get('/group/:groupurl', function (req, res) {
   dbactions.getGroup(req.db, req.params.groupurl,

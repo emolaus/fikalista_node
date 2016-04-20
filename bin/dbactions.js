@@ -21,20 +21,33 @@ dbactions.getGroup = function (db, groupurl, successCallback, errorCallback) {
 dbactions.getUsersFromGroupUrl = function(db, groupurl, successCallback, errorCallback) {
   // get current group
   dbactions.getGroup(db, groupurl, function (group) {
-    var statement = db.prepare('SELECT * FROM users WHERE groupid=?', group.groupid);
-    statement.all(function(err, res) {
+    var statement = db.prepare('SELECT * FROM users WHERE groupurl=? ORDER BY user_order ASC', group.groupurl);
+    statement.all(function(err, users) {
       if (err) {
         console.log('Error at dbactions.getUsersFromGroupUrl: db query get users failed for group: ');
         console.log(group);
         errorCallback(err);
         return;
       }
-      successCallback(res, group);
+      successCallback(users);
     });    
   }, errorCallback);
 };
 
-dbactions.getWeekExceptions = function(db, groupid, successCallback, errorCallback) {
-  // TODO
+dbactions.getWeekExceptions = function(db, groupurl, fromyear, fromweek, successCallback, errorCallback) {
+  // Check group exists 
+  dbactions.getGroup(db, groupurl, function (group) {
+    // Get weeks later than the current week
+    var statement = db.prepare('SELECT week, year FROM skipweeks WHERE year >= ? AND week >= ? ORDER BY year ASC, week ASC', fromyear, fromweek);
+    statement.all(function (err, res) {
+      if (err) {
+        errorCallback(err);
+        return;
+      }
+      successCallback(res);
+    });
+  }, 
+  errorCallback);
+  
 };
 module.exports = dbactions;
