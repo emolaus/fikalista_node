@@ -16,13 +16,16 @@ db.run("CREATE TABLE users (" +
         "fika_count INTEGER DEFAULT 0," +
         "email TEXT," + 
         "last_successful_email_timestamp INTEGER," +
-        "creation_timestamp INTEGER DEFAULT CURRENT_TIMESTAMP NOT NULL" +
+        "last_fika_timestamp INTEGER DEFAULT 0," + 
+        "creation_timestamp INTEGER DEFAULT CURRENT_TIMESTAMP NOT NULL," +
+        "FOREIGN KEY (groupurl) REFERENCES groups(groupurl)" +
         ")");
         
 db.run("CREATE TABLE skipweeks (" + 
         "id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
         "groupurl TEXT NOT NULL," +
         "week INTEGER NOT NULL," +
-        "year INTEGER NOT NULL" +
+        "year INTEGER NOT NULL," +
+        "FOREIGN KEY (groupurl) REFERENCES groups(groupurl)" +
         ")");
-        
+db.close();

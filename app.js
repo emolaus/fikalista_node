@@ -11,6 +11,8 @@ var restapi = require('./routes/restapi');
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('data/database.db');
 
+db.run("PRAGMA foreign_keys=ON;");
+
 var app = express();
 
 // view engine setup

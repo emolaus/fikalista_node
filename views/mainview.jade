@@ -8,12 +8,10 @@ head
   
 
 body(ng-controller="MainController")
+
   .container-fluid 
-    //h1 #{groupname}
-    //.row
-    //  ul(class='list-group' ng-repeat='user in users') 
-    //    li.list-group-item {{user.name}}
-    h1 #{groupname}    
+    
+    h2 #{groupname}    
     ul.list-group
       each val in list
         li.list-group-item

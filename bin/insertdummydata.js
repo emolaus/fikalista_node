@@ -1,6 +1,8 @@
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('data/database.db');
 
+db.run("PRAGMA foreign_keys=ON;");
+
 db.run("INSERT INTO groups (name, groupurl) VALUES ('11223', '11223')");
 db.run("INSERT INTO groups (name, groupurl) VALUES ('My test group', 'mygroup')");
 
