@@ -1,5 +1,5 @@
 var weeklogic = {};
-var dbactions = require('../bin/dbactions');
+var dbactions = require('../private_modules/dbactions');
 var currentWeekNumber = require('current-week-number');
 weeklogic.userListWithWeeks = function(db, groupurl, successCallback, errorCallback) {
   // Get group id

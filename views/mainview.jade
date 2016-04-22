@@ -6,7 +6,6 @@ head
   link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css")
   //script(src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous")
   
-
 body
   nav.navbar.navbar-default.navbar-static-top
     .container-fluid
@@ -16,15 +15,14 @@ body
           span.icon-bar
           span.icon-bar
           span.icon-bar
-        a(class="navbar-brand" href="#") Project name
+        a(class="navbar-brand" href="#") #{groupname}  
       div#navbar.navbar-collapse.collapse
         ul.nav.navbar-nav.navbar-right
-          li.active 
+          li
             a(href="#") Manage weeks
           li
             a(href="#") Manage users
   .container-fluid
-    h2 #{groupname}    
     ul.list-group
       each val in list
         li.list-group-item

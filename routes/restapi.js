@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-var dbactions = require('../bin/dbactions');
-var weeklogic = require('../bin/weeklogic');
+var dbactions = require('../private_modules/dbactions');
+var weeklogic = require('../private_modules/weeklogic');
 
 router.get('/weeklist/:groupurl', function (req, res) {
   console.log('/weekexceptions/:groupurl/:year/:week');

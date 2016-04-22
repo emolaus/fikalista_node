@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-var dbactions = require('../bin/dbactions');
-var weeklogic = require('../bin/weeklogic');
+var dbactions = require('../private_modules/dbactions');
+var weeklogic = require('../private_modules/weeklogic');
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });

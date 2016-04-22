@@ -1,4 +1,4 @@
-var logger = require('../bin/mylogger');
+var logger = require('../private_modules/mylogger');
 var dbactions = {};
 function log(callingFunction, msg) {
   logger.log('dbactions.' + callingFunction);
