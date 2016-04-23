@@ -1,0 +1,41 @@
+doctype html
+html(lang='en')
+head
+  title=fikalistan
+  meta(charset='utf-8' name='viewport' content='width=device-width, initial-scale=1')
+  link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css")
+  link(rel="stylesheet" href="/stylesheets/style.css")
+body
+  nav.navbar.navbar-default.navbar-static-top
+    .container-fluid
+      
+      .navbar-header
+        // button(type="button" class="btn btn-default" aria-label="Left Align")
+          span(class="glyphicon glyphicon-arrow-left" aria-hidden="true")
+        button(type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar")
+          span.sr-only Toggle navigation
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+        
+        a(class="navbar-brand" href="#") Week exceptions
+      div#navbar.navbar-collapse.collapse
+        ul.nav.navbar-nav.navbar-right
+          li
+            a(href="#") Main view
+          li
+            a(href="#") Manage users
+  .container-fluid
+    ul.list-group
+      each val, index in weeks
+        li.list-group-item
+          div= val.year + ' w' + val.week
+            a(href="" class="pull-right")
+              span(class="glyphicon glyphicon-trash" aria-hidden="true")
+      li.list-group-item
+        a(href="")
+          span(class="glyphicon glyphicon-plus" aria-hidden="true")
+  script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js")
+  script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js")
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.4/angular.min.js')
+  //script(src="/javascripts/mainview.js")
