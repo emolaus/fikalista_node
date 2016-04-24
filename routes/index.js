@@ -31,13 +31,21 @@ router.get('/:groupurl/mainview', function (req, res, next) {
 });
 
 router.get('/:groupurl/manageweeks', function (req, res) {
-  var now = new Date();  
-  var currentYear =now.getFullYear();
-  var currentWeek = currentWeekNumber();
-  dbactions.getWeekExceptions(req.db, req.params.groupurl, currentYear, currentWeek, function success(weeks) {
-    res.render('manageweeks', {weeks: weeks});
-  }, function error(msg) {res.send(msg);});
-    
-  });
+  var now = weeklogic.getCurrentWeek();
+  var nextException = now; // Best guess if following line fails
+  weeklogic.getNextWeekException(req.db, req.params.groupurl, now.year, now.week, 
+    function result(err, result) {
+      if (!err) nextException = result;
+      console.log(result);
+      dbactions.getWeekExceptions(req.db, req.params.groupurl, now.year, now.week, function success(weeks) {
+          res.render('manageweeks', {
+            weeks: weeks,
+            defaultAddYear: nextException.year,
+            defaultAddWeek: nextException.week
+          });
+        }, function error(msg) {res.send(msg);});
+        });
+    });
+
 
 module.exports = router;

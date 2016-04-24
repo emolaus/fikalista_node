@@ -1,4 +1,6 @@
 var logger = require('../private_modules/mylogger');
+var currentWeekNumber = require('current-week-number');
+
 var dbactions = {};
 function log(callingFunction, msg) {
   logger.log('dbactions.' + callingFunction);
@@ -41,12 +43,12 @@ dbactions.getUsersFromGroupUrl = function(db, groupurl, successCallback, errorCa
   }, errorCallback);
 };
 
-dbactions.getWeekExceptions = function(db, groupurl, fromyear, fromweek, successCallback, errorCallback) {
+dbactions.getWeekExceptions = function(db, groupurl, fromYear, fromWeek, successCallback, errorCallback) {
   // Check group exists 
   dbactions.getGroup(db, groupurl, function (group) {
     // Get weeks later than the current week
-    var statement = db.prepare('SELECT week, year FROM skipweeks WHERE year >= ? AND week >= ? ORDER BY year ASC, week ASC', fromyear, fromweek);
-    log('getWeekExceptions', 'SELECT week, year FROM skipweeks WHERE year >= ' + fromyear + ' AND week >= ' + fromweek + ' ORDER BY year ASC, week ASC');
+    // tricky - sorting works but how to exclude
+    var statement = db.prepare('SELECT week, year FROM skipweeks WHERE (year > ?) OR (year = ? AND week >= ?) ORDER BY year ASC, week ASC', fromYear, fromYear, fromWeek);
     statement.all(function (err, res) {
       if (err) {
         errorCallback(err);
@@ -58,4 +60,11 @@ dbactions.getWeekExceptions = function(db, groupurl, fromyear, fromweek, success
   errorCallback);
   
 };
+
+dbactions.getCurrentWeek = function () {
+      var now = new Date();
+      var currentYear =now.getFullYear();
+      var currentWeek = currentWeekNumber();
+      return {year: currentYear, week: currentWeek};
+}
 module.exports = dbactions;

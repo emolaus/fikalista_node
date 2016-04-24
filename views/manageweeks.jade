@@ -44,7 +44,12 @@ body
           h4.modal-title Modal Header
 
         .modal-body
-          p Some text in the modal.
+          form(role="form")
+            .form-group
+              label(for="yearInput") Year:
+              input(type="number" class="form-control" id="yearInput" value="#{defaultAddYear}")
+              label(for="weekInput") Week:
+              input(type="number" class="form-control" id="weekInput" value="#{defaultAddWeek}")
         .modal-footer
           button(type="button" class="btn btn-default" data-dismiss="modal") Close
 
