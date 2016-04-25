@@ -41,7 +41,7 @@ body
       .modal-content
         .modal-header
           button(type="button" class="close" data-dismiss="modal") 
-          h4.modal-title Modal Header
+          h4.modal-title Add exception
 
         .modal-body
           form(role="form")
@@ -51,9 +51,10 @@ body
               label(for="weekInput") Week:
               input(type="number" class="form-control" id="weekInput" value="#{defaultAddWeek}")
         .modal-footer
-          button(type="button" class="btn btn-default" data-dismiss="modal") Close
+          button(type="button" class="btn btn-default" data-dismiss="modal") Cancel 
+          button(type="button" class="btn btn-default" id="addWeekExceptionButton") Add
 
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js")
   script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js")
   script(src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.4/angular.min.js')
-  //script(src="/javascripts/mainview.js")
+  script(src="/javascripts/manageweeks.js")
