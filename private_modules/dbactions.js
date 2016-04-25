@@ -95,5 +95,14 @@ dbactions.deleteUser = function(db, groupurl, userid, successCallback, errorCall
     if (err) errorCallback('Failed deleting user.');
     else successCallback();
   });
-}
+};
+
+dbactions.editUser = function(db, userid, name, email, successCallback, errorCallback) {
+  var statement = db.prepare('UPDATE users SET name=?, email=? WHERE userid=?', name, email, userid);
+  log('editUser', 'UPDATE users SET name=' + name + ', email=' + email + ' WHERE userid=' + userid);
+  statement.run(function (err) {
+    if (err) errorCallback('Failed updating user.');
+    else successCallback();
+  });
+};
 module.exports = dbactions;

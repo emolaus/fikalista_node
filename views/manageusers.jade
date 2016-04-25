@@ -76,15 +76,15 @@ body
             select(class="form-control" id="selectUserToEdit")
               option(class="editUser" value="")
               each user in allUsers
-                option(class="editUser" value="#{user.userid}") #{user.name}
+                option(class="editUser" value="#{user.userid}" data-name="#{user.name}" data-email="#{user.email}") #{user.name}
             
             label(for="editName") Name (should be unique for the group):
-            input(type="text" class="form-control" id="editName" value="kakak")
+            input(type="text" class="form-control" id="editName")
             label(for="editEmail") Email (optional, for reminders):
             input(type="email" class="form-control" id="editEmail")
         .modal-footer
           button(type="button" class="btn btn-default" data-dismiss="modal") Cancel 
-          button(type="button" class="btn btn-default" id="deleteUserButton") Save
+          button(type="button" class="btn btn-default" id="editUserButton") Save
                     
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js")
   script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js")

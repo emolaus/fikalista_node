@@ -8,7 +8,6 @@ $(document).ready(function () {
       type: 'PUT'
     }).done(function (error) {
       if (!error) location.reload();
-      else console.log(error);
     });
   });
   $('.deleteWeek').click(function () {
@@ -18,7 +17,6 @@ $(document).ready(function () {
       type: 'DELETE'
     }).done(function (error){
       if (!error) location.reload();
-      else console.log(error);
     });
     
   });

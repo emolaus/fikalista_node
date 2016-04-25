@@ -31,7 +31,6 @@ router.get('/:groupurl/manageweeks', function (req, res) {
   weeklogic.getNextWeekException(req.db, req.params.groupurl, now.year, now.week, 
     function result(err, result) {
       if (!err) nextException = result;
-      console.log(result);
       dbactions.getWeekExceptions(req.db, req.params.groupurl, now.year, now.week, function success(weeks) {
           res.render('manageweeks', {
             weeks: weeks,
@@ -86,11 +85,23 @@ router.delete('/user/:groupurl/:userid', function (req, res) {
       res.send(msg);
     });
 });
+
+router.put('/user/:userid/:name/:email?', function (req, res) {
+  var email = req.params.email;
+  if (!email) email = "";
+  dbactions.editUser(req.db, req.params.userid, req.params.name, req.params.email, 
+  function success() {
+    res.send();
+  }, function error(msg) {
+    res.send(msg);
+  });
+});
+
 module.exports = router;
 
-/*Use cases for manage users
-Add user
-Remove user
-Edit user
-Change weeks 
+/* TODO list
+do not accept empty name
+check so that name isn't taken on add user or edit users
+felhantering i client js, nåt meddelande
+efter add, remove, edit, change: meddelande till användare
 */
