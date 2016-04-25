@@ -28,8 +28,8 @@ body
 
   button(type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#addUserModal") Add user
   button(type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#removeUserModal") Remove user
-  button(type="button" class="btn btn-primary btn-block") Edit user
-  button(type="button" class="btn btn-primary btn-block") Change weeks between users
+  button(type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#editUserModal") Edit user
+  button(type="button" class="btn btn-primary btn-block") Change weeks between users 
 
   div(class="modal fade" id="addUserModal" role="dialog")
     div(class="modal-dialog")
@@ -56,13 +56,36 @@ body
           h4.modal-title Remove user
         .modal-body
           .form-group
-            label(for="sel1") Select list:
+            label(for="selectUserToDelete") Select user:
             select(class="form-control" id="selectUserToDelete")
               each user in allUsers
                 option(class="deleteUser" value="#{user.userid}") #{user.name}
         .modal-footer
           button(type="button" class="btn btn-default" data-dismiss="modal") Cancel 
           button(type="button" class="btn btn-default" id="deleteUserButton") Remove
+
+  div(class="modal fade" id="editUserModal" role="dialog")
+    div(class="modal-dialog")
+      .modal-content
+        .modal-header
+          button(type="button" class="close" data-dismiss="modal") 
+          h4.modal-title Edit user
+        .modal-body
+          .form-group
+            label(for="selectUserToEdit") Select user:
+            select(class="form-control" id="selectUserToEdit")
+              option(class="editUser" value="")
+              each user in allUsers
+                option(class="editUser" value="#{user.userid}") #{user.name}
+            
+            label(for="editName") Name (should be unique for the group):
+            input(type="text" class="form-control" id="editName" value="kakak")
+            label(for="editEmail") Email (optional, for reminders):
+            input(type="email" class="form-control" id="editEmail")
+        .modal-footer
+          button(type="button" class="btn btn-default" data-dismiss="modal") Cancel 
+          button(type="button" class="btn btn-default" id="deleteUserButton") Save
+                    
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js")
   script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js")
   script(src="/javascripts/manageusers.js")

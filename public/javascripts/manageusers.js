@@ -10,6 +10,23 @@ $(document).ready(function () {
       if (!error) location.reload();
       else console.log(error);
     });
+  });
+  $('#selectUserToEdit').change(function () {
+    var userid = $(this).val();
+    if (!userid) {
+      $('#editName').val("");
+      $('#editEmail').val("");
+      return;
+    }
+    var newName = $('#editName').val();
+    var newEmail = $('#editEmail').val();
+    $.ajax({
+      url: '/user/' + groupurl + '/' + userid + '/' + newName + '/' + newEmail,
+      type: 'PUT'
+    }).done(function (error){
+      if (!error) location.reload();
+      else console.log(error);
+    });
     
   });
 });
