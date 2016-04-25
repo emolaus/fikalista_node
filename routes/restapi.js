@@ -59,9 +59,4 @@ router.get('/users/:groupurl', function (req, res, next) {
     });
 });
 
-router.put('/weekexception', function (req, res) {
-  // TODO data in req.body, put in DB and return
-  res.send('NOT IMPLEMENTED');
-});
-
 module.exports = router;

@@ -67,4 +67,15 @@ dbactions.getCurrentWeek = function () {
       var currentWeek = currentWeekNumber();
       return {year: currentYear, week: currentWeek};
 }
+
+dbactions.addWeekException = function (db, groupurl, year, week, successCallback, errorCallback) {
+  var statement = db.prepare('INSERT INTO skipweeks (groupurl, week, year) VALUES (?, ?, ?)', groupurl, week, year);
+  log('addWeekException', 'INSERT INTO skipweeks (groupurl, week, year) VALUES (' + groupurl + ',' + week + ',' + year + ')');
+    
+  statement.run(function (err) {
+    if (err) errorCallback('Failed inserting data');
+    else successCallback();
+  });
+  
+}
 module.exports = dbactions;

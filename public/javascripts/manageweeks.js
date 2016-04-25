@@ -1,15 +1,14 @@
 $(document).ready(function () {
-  console.log('HERE');
+  // var groupurl injected from jade
   $('#addWeekExceptionButton').click(function () {
     var year = $('#yearInput').val();
     var week = $('#weekInput').val();
     $.ajax({
-      url: '/restapi/weekexception',
-      type: 'PUT',
-      data: {year: year, week: week}
-    }).done(function () {
-      console.log(arguments);
-      
+      url: '/weekexception/'+ groupurl + '/' + year + '/' + week,
+      type: 'PUT'
+    }).done(function (error) {
+      if (!error) location.reload();
+      else console.log(error);
     });
   });
 });

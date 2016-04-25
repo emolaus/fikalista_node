@@ -41,11 +41,24 @@ router.get('/:groupurl/manageweeks', function (req, res) {
           res.render('manageweeks', {
             weeks: weeks,
             defaultAddYear: nextException.year,
-            defaultAddWeek: nextException.week
+            defaultAddWeek: nextException.week,
+            groupurl: req.params.groupurl
           });
-        }, function error(msg) {res.send(msg);});
+        }, function error(msg) {
+          res.send(msg);
         });
-    });
+  });
+});
 
+
+
+router.put('/weekexception/:groupurl/:year/:week', function (req, res) {
+  dbactions.addWeekException(req.db, req.params.groupurl, req.params.year, req.params.week, 
+    function success() {
+      res.send();
+    }, function error(msg) {
+      res.send(msg);
+    });
+});
 
 module.exports = router;

@@ -1,14 +1,16 @@
+// NPM stuff
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var sqlite3 = require('sqlite3').verbose();
 
 var routes = require('./routes/index');
 var restapi = require('./routes/restapi');
+var login = require('./private_modules/login');
 
-var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('data/database.db');
 
 db.run("PRAGMA foreign_keys=ON;");
@@ -36,7 +38,7 @@ app.use(function(req,res,next){
     next();
 });
 
-app.use('/', routes);
+app.use('/', login.loginMiddleware, routes);
 app.use('/restapi', restapi);
 
 // catch 404 and forward to error handler
