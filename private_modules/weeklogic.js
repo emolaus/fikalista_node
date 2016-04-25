@@ -4,7 +4,7 @@ var currentWeekNumber = require('current-week-number');
 weeklogic.userListWithWeeks = function(db, groupurl, successCallback, errorCallback) {
   // Get group id
   dbactions.getGroup(db, groupurl, function success(group) {
-    dbactions.getUsersFromGroupUrl(db, groupurl, function success(users) {
+    dbactions.getUsers(db, groupurl, function success(users) {
       // Fetch weeks and assign week to each user.
       var now = new Date();
       var currentYear =now.getFullYear();

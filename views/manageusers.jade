@@ -57,15 +57,12 @@ body
         .modal-body
           .form-group
             label(for="sel1") Select list:
-            select(class="form-control" id="sel1")
-              option 1
-              option 2
-              option 3
-              option 4
-
+            select(class="form-control" id="selectUserToDelete")
+              each user in allUsers
+                option(class="deleteUser" value="#{user.userid}") #{user.name}
         .modal-footer
           button(type="button" class="btn btn-default" data-dismiss="modal") Cancel 
-          button(type="button" class="btn btn-default" id="addWeekExceptionButton") Remove
+          button(type="button" class="btn btn-default" id="deleteUserButton") Remove
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js")
   script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js")
-  //script(src="/javascripts/manageusers.js")
+  script(src="/javascripts/manageusers.js")

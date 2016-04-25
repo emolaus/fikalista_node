@@ -48,7 +48,7 @@ router.get('/groups', function (req, res, next) {
 });
 router.get('/users/:groupurl', function (req, res, next) {
   // Check so that groupurl exists
-  dbactions.getUsersFromGroupUrl(
+  dbactions.getUsers(
     req.db, 
     req.params.groupurl, 
     function success(rows) {

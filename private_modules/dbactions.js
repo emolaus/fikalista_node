@@ -26,14 +26,14 @@ dbactions.getGroup = function (db, groupurl, successCallback, errorCallback) {
     successCallback(group);
   });
 };
-dbactions.getUsersFromGroupUrl = function(db, groupurl, successCallback, errorCallback) {
+dbactions.getUsers = function(db, groupurl, successCallback, errorCallback) {
   // get current group
   dbactions.getGroup(db, groupurl, function (group) {
     var statement = db.prepare('SELECT * FROM users WHERE groupurl=? ORDER BY user_order ASC', group.groupurl);
-    log('getUsersFromGroupUrl', 'SELECT * FROM users WHERE groupurl=' + group.groupurl + ' ORDER BY user_order ASC');
+    log('getUsers', 'SELECT * FROM users WHERE groupurl=' + group.groupurl + ' ORDER BY user_order ASC');
     statement.all(function(err, users) {
       if (err) {
-        console.log('Error at dbactions.getUsersFromGroupUrl: db query get users failed for group: ');
+        console.log('Error at dbactions.getUsers: db query get users failed for group: ');
         console.log(group);
         errorCallback(err);
         return;
@@ -88,4 +88,12 @@ dbactions.deleteWeekException = function(db, groupurl, weekid, successCallback, 
   });
 };
 
+dbactions.deleteUser = function(db, groupurl, userid, successCallback, errorCallback) {
+  var statement = db.prepare('DELETE FROM users WHERE groupurl=? AND userid=?', groupurl, userid);
+  log('deleteUser', 'DELETE FROM users WHERE groupurl=' + groupurl + ' AND userid=' + userid);
+  statement.run(function (err) {
+    if (err) errorCallback('Failed deleting user.');
+    else successCallback();
+  });
+}
 module.exports = dbactions;

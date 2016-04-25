@@ -46,9 +46,17 @@ router.get('/:groupurl/manageweeks', function (req, res) {
 });
 
 router.get('/:groupurl/manageusers', function (req, res) {
-  res.render('manageusers', {
-    groupurl: req.params.groupurl
+  dbactions.getUsers(req.db, req.params.groupurl, function success(allUsers) {
+    
+    console.log(allUsers);
+    res.render('manageusers', {
+      groupurl: req.params.groupurl,
+      allUsers: allUsers
+  });  
+  }, function error() {
+    res.render('Error when reading database.');
   });
+  
 });
 
 
@@ -63,6 +71,15 @@ router.put('/weekexception/:groupurl/:year/:week', function (req, res) {
 
 router.delete('/weekexception/:groupurl/:weekid', function (req, res) {
   dbactions.deleteWeekException(req.db, req.params.groupurl, req.params.weekid, 
+    function success() {
+      res.send();
+    }, function error(msg) {
+      res.send(msg);
+    });
+});
+
+router.delete('/user/:groupurl/:userid', function (req, res) {
+  dbactions.deleteUser(req.db, req.params.groupurl, req.params.userid, 
     function success() {
       res.send();
     }, function error(msg) {
