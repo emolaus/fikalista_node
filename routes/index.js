@@ -50,8 +50,6 @@ router.get('/:groupurl/manageweeks', function (req, res) {
   });
 });
 
-
-
 router.put('/weekexception/:groupurl/:year/:week', function (req, res) {
   dbactions.addWeekException(req.db, req.params.groupurl, req.params.year, req.params.week, 
     function success() {
@@ -61,4 +59,12 @@ router.put('/weekexception/:groupurl/:year/:week', function (req, res) {
     });
 });
 
+router.delete('/weekexception/:groupurl/:weekid', function (req, res) {
+  dbactions.deleteWeekException(req.db, req.params.groupurl, req.params.weekid, 
+    function success() {
+      res.send();
+    }, function error(msg) {
+      res.send(msg);
+    });
+});
 module.exports = router;

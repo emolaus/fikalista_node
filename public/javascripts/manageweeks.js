@@ -11,4 +11,15 @@ $(document).ready(function () {
       else console.log(error);
     });
   });
+  $('.deleteWeek').click(function () {
+    var weekid = $(this).data('id');
+    $.ajax({
+      url: '/weekexception/' + groupurl + '/' + weekid,
+      type: 'DELETE'
+    }).done(function (error){
+      if (!error) location.reload();
+      else console.log(error);
+    });
+    
+  });
 });

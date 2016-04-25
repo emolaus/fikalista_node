@@ -48,7 +48,7 @@ dbactions.getWeekExceptions = function(db, groupurl, fromYear, fromWeek, success
   dbactions.getGroup(db, groupurl, function (group) {
     // Get weeks later than the current week
     // tricky - sorting works but how to exclude
-    var statement = db.prepare('SELECT week, year FROM skipweeks WHERE (year > ?) OR (year = ? AND week >= ?) ORDER BY year ASC, week ASC', fromYear, fromYear, fromWeek);
+    var statement = db.prepare('SELECT id, week, year FROM skipweeks WHERE groupurl=? AND( (year > ?) OR (year = ? AND week >= ?)) ORDER BY year ASC, week ASC', groupurl, fromYear, fromYear, fromWeek);
     statement.all(function (err, res) {
       if (err) {
         errorCallback(err);
@@ -78,4 +78,14 @@ dbactions.addWeekException = function (db, groupurl, year, week, successCallback
   });
   
 }
+
+dbactions.deleteWeekException = function(db, groupurl, weekid, successCallback, errorCallback) {
+  var statement = db.prepare('DELETE FROM skipweeks WHERE groupurl=? AND id=?', groupurl, weekid);
+  log('deleteWeekException', 'DELETE FROM skipweeks WHERE groupurl=' + groupurl + ' AND id=' + weekid);
+  statement.run(function (err) {
+    if (err) errorCallback('Failed deleting week exception.');
+    else successCallback();
+  });
+};
+
 module.exports = dbactions;

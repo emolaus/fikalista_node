@@ -32,7 +32,7 @@ body
       each val, index in weeks
         li.list-group-item
           div= val.year + ' w' + val.week
-            a(href="" class="pull-right")
+            a(href="" class="pull-right deleteWeek" data-id="#{val.id}")
               span(class="glyphicon glyphicon-trash" aria-hidden="true")
       li.list-group-item
         a(href="" data-toggle="modal" data-target="#addWeekExceptionModal")
