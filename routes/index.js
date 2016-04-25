@@ -5,11 +5,6 @@ var dbactions = require('../private_modules/dbactions');
 var weeklogic = require('../private_modules/weeklogic');
 var currentWeekNumber = require('current-week-number');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
-
 router.get('/:groupurl/mainview', function (req, res, next) {
     dbactions.getGroup(req.db, req.params.groupurl, 
     function successCallback(group) {
@@ -50,6 +45,13 @@ router.get('/:groupurl/manageweeks', function (req, res) {
   });
 });
 
+router.get('/:groupurl/manageusers', function (req, res) {
+  res.render('manageusers', {
+    groupurl: req.params.groupurl
+  });
+});
+
+
 router.put('/weekexception/:groupurl/:year/:week', function (req, res) {
   dbactions.addWeekException(req.db, req.params.groupurl, req.params.year, req.params.week, 
     function success() {
@@ -68,3 +70,10 @@ router.delete('/weekexception/:groupurl/:weekid', function (req, res) {
     });
 });
 module.exports = router;
+
+/*Use cases for manage users
+Add user
+Remove user
+Edit user
+Change weeks 
+*/

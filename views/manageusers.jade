@@ -5,27 +5,32 @@ head
   meta(charset='utf-8' name='viewport' content='width=device-width, initial-scale=1')
   link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css")
   link(rel="stylesheet" href="/stylesheets/style.css")
+  script.
+    var groupurl = "#{groupurl}";
 body
   nav.navbar.navbar-default.navbar-static-top
     .container-fluid
+      
       .navbar-header
         button(type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar")
           span.sr-only Toggle navigation
           span.icon-bar
           span.icon-bar
           span.icon-bar
-        a(class="navbar-brand" href="#") #{groupname}  
+        
+        a(class="navbar-brand" href="#") Manage users
       div#navbar.navbar-collapse.collapse
         ul.nav.navbar-nav.navbar-right
           li
-            a(href="/#{groupurl}/manageweeks") Manage weeks
+            a(href="/#{groupurl}/mainview") Main view
           li
-            a(href="/#{groupurl}/manageusers") Manage users
-  .container-fluid
-    ul.list-group
-      each val, index in list
-        li.list-group-item(class=(index === 0 ? "currentweek" : ""))
-          div= "w" + val.week + ': ' + val.name
-    
+            a(href="/#{groupurl}/manageweeks") Manage weeks
+
+      button(type="button" class="btn btn-primary btn-block") Add user
+      button(type="button" class="btn btn-primary btn-block") Remove user
+      button(type="button" class="btn btn-primary btn-block") Edit user
+      button(type="button" class="btn btn-primary btn-block") Change weeks between users
+  
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js")
   script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js")
+  //script(src="/javascripts/manageusers.js")
