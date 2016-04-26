@@ -1,5 +1,15 @@
 $(document).ready(function () {
-
+  
+  $('#addUserButton').click(function () { 
+    var name = $('#addName').val();
+    var email = $('#addEmail').val();
+    $.ajax({
+      url: '/adduser/' + groupurl + '/' + name + '/' + email,
+      type: 'PUT'
+    }).done(function (error){
+      if (!error) location.reload();
+    });
+  });
   $('#deleteUserButton').click(function () {
     var userid = $('#selectUserToDelete').val();
     $.ajax({

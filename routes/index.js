@@ -86,6 +86,18 @@ router.delete('/user/:groupurl/:userid', function (req, res) {
     });
 });
 
+router.put('/adduser/:groupurl/:name/:email?', function (req, res) {
+  var email = req.params.email;
+  if (!email) email = "";
+  console.log('req.params:'); console.log(req.params);
+  dbactions.addUser(req.db, req.params.groupurl, req.params.name, email, 
+  function success() {
+    res.send();
+  }, function error(msg) {
+    res.send(msg);
+  });
+});
+
 router.put('/user/:userid/:name/:email?', function (req, res) {
   var email = req.params.email;
   if (!email) email = "";
