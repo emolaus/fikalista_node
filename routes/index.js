@@ -88,7 +88,7 @@ router.delete('/user/:groupurl/:userid', function (req, res) {
 
 router.put('/adduser/:groupurl/:name/:email?', function (req, res) {
   var email = req.params.email;
-  if (!email) email = "";
+  if (!email) email = null;
   console.log('req.params:'); console.log(req.params);
   dbactions.addUser(req.db, req.params.groupurl, req.params.name, email, 
   function success() {

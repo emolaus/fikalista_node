@@ -101,13 +101,18 @@ dbactions.addUser = function(db, groupurl, name, email, successCallback, errorCa
   // TODO get max user_order. Set 100 over. Doesn't work.
   var statement = db.prepare('SELECT MAX(user_order) FROM users WHERE groupurl=?', groupurl);
   log('addUser', 'SELECT MAX(user_order) FROM users WHERE groupurl=' + groupurl);
-  statement.run(function (err, res) {
+  statement.get(function (err, res) {
     if (err) {
-      console.log('error;');
-      console.log(err);
+      errorCallback(err);
+      return;
     }
-    console.log('addUser result:');
-    console.log(res);
+    var maxOrder = res['MAX(user_order)']
+    var newMaxOrder = maxOrder + 100;
+    var statement2 = db.prepare('INSERT INTO users (groupurl, name, user_order, email) VALUES (?,?,?,?)', groupurl, name, newMaxOrder, email);
+    statement2.run(function (err) {
+      if (err) errorCallback(err);
+      else successCallback();
+    });
   });
   /*var statement = db.prepare('INSERT INTO users (groupurl, name, email) email=? WHERE userid=?', name, email, userid);
   log('editUser', 'UPDATE users SET name=' + name + ', email=' + email + ' WHERE userid=' + userid);
