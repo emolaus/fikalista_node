@@ -26,6 +26,12 @@ dbactions.getGroup = function (db, groupurl, successCallback, errorCallback) {
     successCallback(group);
   });
 };
+dbactions.getGroups = function(db, successCallback, errorCallback) {
+  db.all('SELECT * FROM groups', function (err, list) {
+    if (err) errorCallback(err);
+    else successCallback(list);
+  });
+}
 dbactions.getUsers = function(db, groupurl, successCallback, errorCallback) {
   // get current group
   dbactions.getGroup(db, groupurl, function (group) {
@@ -114,12 +120,6 @@ dbactions.addUser = function(db, groupurl, name, email, successCallback, errorCa
       else successCallback();
     });
   });
-  /*var statement = db.prepare('INSERT INTO users (groupurl, name, email) email=? WHERE userid=?', name, email, userid);
-  log('editUser', 'UPDATE users SET name=' + name + ', email=' + email + ' WHERE userid=' + userid);
-  statement.run(function (err) {
-    if (err) errorCallback('Failed updating user.');
-    else successCallback();
-  });*/
 };
 
 dbactions.editUser = function(db, userid, name, email, successCallback, errorCallback) {
@@ -128,6 +128,19 @@ dbactions.editUser = function(db, userid, name, email, successCallback, errorCal
   statement.run(function (err) {
     if (err) errorCallback('Failed updating user.');
     else successCallback();
+  });
+};
+dbactions.checkReminder = function(db, groupurl, userid, year, week, successCallback, errorCallback) {
+  var statement = db.prepare('SELECT * FROM reminders WHERE groupurl=? AND userid=? AND year=? AND week=?', groupurl, userid, year, week);
+  statement.get(function (err, row) {
+    if (err) {
+      errorCallback(err);
+      console.log('checkReminder error:');
+      console.log(err);
+      log('checkReminder', 'Failed finding reminder.');
+    }
+    console.log(row);
+    successCallback(row);
   });
 };
 module.exports = dbactions;

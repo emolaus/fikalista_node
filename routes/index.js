@@ -111,9 +111,3 @@ router.put('/user/:userid/:name/:email?', function (req, res) {
 
 module.exports = router;
 
-/* TODO list
-do not accept empty name
-check so that name isn't taken on add user or edit users
-felhantering i client js, nåt meddelande
-efter add, remove, edit, change: meddelande till användare
-*/

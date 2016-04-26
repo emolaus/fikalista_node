@@ -28,4 +28,14 @@ db.run("CREATE TABLE skipweeks (" +
         "year INTEGER NOT NULL," +
         "FOREIGN KEY (groupurl) REFERENCES groups(groupurl)" +
         ")");
+db.run("CREATE TABLE reminders (" +
+        "id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+        "groupurl TEXT NOT NULL," + 
+        "userid INTEGER NOT NULL," + 
+        "year INTEGER NOT NULL," +
+        "week INTEGER NOT NULL," +
+        "timestamp INTEGER DEFAULT CURRENT_TIMESTAMP NOT NULL," +
+        "FOREIGN KEY (groupurl) REFERENCES groups(groupurl)," +
+        "FOREIGN KEY (userid) REFERENCES users(userid)" +
+        ")"); 
 db.close();
