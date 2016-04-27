@@ -46,7 +46,7 @@ function sendReminder(user, callback) {
   if (!user.email) callback(false);
   else if (!validator.isEmail(user.email)) callback(false);
   else {
-    mailer.sendMessage(user.email, 'duharfikat@gmail.com', 'Fikapåminnelse', 'Hej ' + user.name + '!\n Du har fikat denna vecka!',
+    mailer.sendMessage(user.email, 'duharfikat@gmail.com', 'Jobbfikat', 'Hej ' + user.name + '!\n Du har fikat denna vecka!',
     function success() {
       callback(true);
     }, function error() {
