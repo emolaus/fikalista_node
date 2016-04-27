@@ -88,4 +88,9 @@ weeklogic.getCurrentWeek = function () {
       return {year: currentYear, week: currentWeek};
 }
 
+weeklogic.getWeekBefore = function (year, week) {
+  if (week > 1) return {year: year, week: week - 1};
+  var prevYear = year - 1;
+  if (week == 1) return {year: prevYear, week: currentWeekNumber(new Date('December 28, ' + prevYear))};
+}
 module.exports = weeklogic;

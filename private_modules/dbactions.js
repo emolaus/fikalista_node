@@ -140,4 +140,15 @@ dbactions.checkReminder = function(db, groupurl, userid, year, week, successCall
     successCallback(row);
   });
 };
+
+/**
+ *
+ */
+dbactions.changeWeeks = function (db, useridA, useridB, successCallback, errorCallback) {
+  // Check so that users belong to same group
+  // 3 changes to DB so use transaction:
+  // get user_order for both users
+  // switch user_order
+  // update groups(year, week, userid)
+};
 module.exports = dbactions;

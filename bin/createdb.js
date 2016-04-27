@@ -2,12 +2,12 @@ var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('data/database.db');
 
 db.run("CREATE TABLE groups (" + 
-        //"groupid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," + 
         "groupurl TEXT NOT NULL PRIMARY KEY UNIQUE," +
         "name TEXT NOT NULL," +
-        "pincode TEXT DEFAULT '0000'," + 
+        "pincode TEXT DEFAULT '0000'," +
         "creation_time INTEGER DEFAULT CURRENT_TIMESTAMP NOT NULL" +
         ")");
+        
 db.run("CREATE TABLE users (" + 
         "userid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
         "groupurl TEXT NOT NULL," + 
@@ -15,8 +15,6 @@ db.run("CREATE TABLE users (" +
         "user_order INTEGER DEFAULT 0," + // "order" protected keyword...
         "fika_count INTEGER DEFAULT 0," +
         "email TEXT," + 
-        "last_fika_year," + 
-        "last_fika_week INTEGER DEFAULT 0," + 
         "creation_timestamp INTEGER DEFAULT CURRENT_TIMESTAMP NOT NULL," +
         "FOREIGN KEY (groupurl) REFERENCES groups(groupurl)" +
         ")");
@@ -28,6 +26,7 @@ db.run("CREATE TABLE skipweeks (" +
         "year INTEGER NOT NULL," +
         "FOREIGN KEY (groupurl) REFERENCES groups(groupurl)" +
         ")");
+        
 db.run("CREATE TABLE reminders (" +
         "id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
         "groupurl TEXT NOT NULL," + 
@@ -38,4 +37,11 @@ db.run("CREATE TABLE reminders (" +
         "FOREIGN KEY (groupurl) REFERENCES groups(groupurl)," +
         "FOREIGN KEY (userid) REFERENCES users(userid)" +
         ")"); 
+        
+db.run("CREATE TABLE updatescriptlastrun (" +
+        "year INTEGER," + 
+        "week INTEGER," +
+        "timestamp INTEGER DEFAULT CURRENT_TIMESTAMP NOT NULL" +
+        ")");
+        
 db.close();
