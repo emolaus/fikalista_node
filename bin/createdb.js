@@ -15,7 +15,8 @@ db.run("CREATE TABLE users (" +
         "user_order INTEGER DEFAULT 0," + // "order" protected keyword...
         "fika_count INTEGER DEFAULT 0," +
         "email TEXT," + 
-        "last_fika_timestamp INTEGER DEFAULT 0," + 
+        "last_fika_year," + 
+        "last_fika_week INTEGER DEFAULT 0," + 
         "creation_timestamp INTEGER DEFAULT CURRENT_TIMESTAMP NOT NULL," +
         "FOREIGN KEY (groupurl) REFERENCES groups(groupurl)" +
         ")");

@@ -39,7 +39,7 @@ function sendEmails() {
         statementCheckReminderSend.get(function (err, reminderHasBeenSent) {
           if (err) log('Failed checking if reminder has been sent', 'sendReminders.sendEmails');
           if (!reminderHasBeenSent) {
-            // TODO Check if reminder SHOULD be sent this week (does the group have an exception this week?)
+            // Check if reminder SHOULD be sent this week (does the group have an exception this week?)
             var statementCheckIfReminderShouldBeSent = db.prepare('SELECT * FROM skipweeks WHERE groupurl=? AND year=? AND week=?',user.groupurl, year, week);
             statementCheckIfReminderShouldBeSent.get(function (err, skipThisWeek) {
               if (err) {
@@ -93,5 +93,4 @@ function updateDatabaseWithMailInfo(user) {
       log('Failed updating reminder table for user ' + JSON.stringify(user), 'sendReminders.updateDatabaseWithMailInfo');
     }
   });
-  // TODO update table users
 }
