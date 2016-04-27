@@ -11,14 +11,23 @@ db.serialize(function () {
   
   db.run("INSERT INTO groups (name, groupurl) VALUES ('A group to mail', 'group1')");
   db.run("INSERT INTO groups (name, groupurl) VALUES ('A group with exception', 'group2')");
+  db.run("INSERT INTO groups (name, groupurl) VALUES ('A group with several exceptions', 'group3')");
   
   db.run("INSERT INTO users (groupurl, name, user_order, email) VALUES ('group1', 'Adam', 100, 'contact@mattiasolausson.se')");
   db.run("INSERT INTO users (groupurl, name, user_order, email) VALUES ('group1', 'Bertil', 200, 'contact@mattiasolausson.se')");
+  db.run("INSERT INTO users (groupurl, name, user_order, email) VALUES ('group1', 'Calle', 300, 'contact@mattiasolausson.se')");
   
-  db.run("INSERT INTO users (groupurl, name, user_order, email) VALUES ('group2', 'Calle', 100, 'contact@mattiasolausson.se')");
-  db.run("INSERT INTO users (groupurl, name, user_order, email) VALUES ('group2', 'David', 200, 'contact@mattiasolausson.se')");
+  db.run("INSERT INTO users (groupurl, name, user_order, email) VALUES ('group2', 'Alva', 100, 'contact@mattiasolausson.se')");
+  db.run("INSERT INTO users (groupurl, name, user_order, email) VALUES ('group2', 'Bea', 200, 'contact@mattiasolausson.se')");
+  db.run("INSERT INTO users (groupurl, name, user_order, email) VALUES ('group2', 'Cilla', 300, 'contact@mattiasolausson.se')");
   
-  db.run("INSERT INTO skipweeks (groupurl, week, year) VALUES ('group2', 17, 2016)");
+  db.run("INSERT INTO users (groupurl, name, user_order, email) VALUES ('group3', 'Arvid', 100, 'contact@mattiasolausson.se')");
+  db.run("INSERT INTO users (groupurl, name, user_order, email) VALUES ('group3', 'Beda', 200, 'contact@mattiasolausson.se')");
+  db.run("INSERT INTO users (groupurl, name, user_order, email) VALUES ('group3', 'Carl', 300, 'contact@mattiasolausson.se')");
   
-  db.run("INSERT INTO updatescriptlastrun (week, year) VALUES (16, 2016)");
+  db.run("INSERT INTO skipweeks (groupurl, week, year) VALUES ('group2', 16, 2016)");
+  
+  db.run("INSERT INTO skipweeks (groupurl, week, year) VALUES ('group3', 16, 2016)");
+  db.run("INSERT INTO skipweeks (groupurl, week, year) VALUES ('group3', 17, 2016)");
+  db.run("INSERT INTO skipweeks (groupurl, week, year) VALUES ('group3', 18, 2016)");
 });

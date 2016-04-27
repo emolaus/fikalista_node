@@ -9,17 +9,15 @@ function log(callingFunction, msg) {
 
 dbactions.getGroup = function (db, groupurl, successCallback, errorCallback) {
   var statement = db.prepare("SELECT * FROM groups WHERE groupurl=?", groupurl);
-  log('getGroup', "SELECT * FROM groups WHERE groupurl="+ groupurl);
   statement.all(function (err, res) {
     if (err) {
       console.log('Error at dbactions.getGroupId: db query get group failed for groupurl ' + groupurl);
-      console.log(group);
       errorCallback(err);
       return;
     }
     if (res.length == 0) {
-      console.log('Group ' + groupurl + 'not found at dbactions.getGroupId');
-      errorCallback('Group not found in database.');
+      log('Group ' + groupurl + 'not found at dbactions.getGroupId');
+      errorCallback('getGroup','Group not found in database.');
       return;
     }
     var group = res[0];

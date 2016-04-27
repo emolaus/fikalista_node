@@ -1,14 +1,16 @@
 var weeklogic = {};
 var dbactions = require('../private_modules/dbactions');
 var currentWeekNumber = require('current-week-number');
+var config = require('../config/config');
+
 weeklogic.userListWithWeeks = function(db, groupurl, successCallback, errorCallback) {
   // Get group id
   dbactions.getGroup(db, groupurl, function success(group) {
     dbactions.getUsers(db, groupurl, function success(users) {
       // Fetch weeks and assign week to each user.
-      var now = new Date();
-      var currentYear =now.getFullYear();
-      var currentWeek = currentWeekNumber();
+      var now = weeklogic.getCurrentWeek();
+      var currentYear =now.year;
+      var currentWeek = now.week();
       var checkWeek = new Date();
       var stepWeekMilliseconds = 7 * 24 * 3600 * 1000;
       dbactions.getWeekExceptions(db, groupurl, currentYear, currentWeek, function success(weeks) {
@@ -83,8 +85,8 @@ weeklogic.getNextWeekException = function (db, groupurl, fromYear, fromWeek, cal
 
 weeklogic.getCurrentWeek = function () {
       var now = new Date();
-      var currentYear =now.getFullYear();
-      var currentWeek = currentWeekNumber();
+      var currentYear = config.TESTMODE ? config.TESTYEAR : now.getFullYear();
+      var currentWeek = config.TESTMODE ? config.TESTWEEK : currentWeekNumber();
       return {year: currentYear, week: currentWeek};
 }
 
