@@ -3,8 +3,9 @@ var db = new sqlite3.Database('data/database.db');
 db.serialize(function () {
   db.run("PRAGMA foreign_keys=ON;");
   
-  db.run("DELETE FROM users");
   db.run("DELETE FROM skipweeks");
+  db.run("DELETE FROM reminders");
+  db.run("DELETE FROM users");
   db.run("DELETE FROM groups");
   
   db.run("INSERT INTO groups (name, groupurl) VALUES ('A group to mail', 'mailgroup')");

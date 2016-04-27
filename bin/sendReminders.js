@@ -3,14 +3,17 @@ var db = new sqlite3.Database('data/database.db');
 db.run("PRAGMA foreign_keys=ON;");
 
 var currentWeekNumber = require('current-week-number');
-var logger = require('../private_modules/mylogger');
+var log = require('../private_modules/mylogger').log;
 var dbactions = require('../private_modules/dbactions');
 var validator = require('validator');
 var mailer = require('../private_modules/mail');
+
+var TESTMODE = true; // Don't mail, just print to console
+
 // Get current year, current week
 var today = new Date();
-var year = today.getFullYear();
-var week = currentWeekNumber(today);
+var year = TESTMODE ? 2016 : today.getFullYear();
+var week = TESTMODE ? 17 : currentWeekNumber(today);
 
 // TODO Step forward each group if not previously done
 
@@ -26,18 +29,36 @@ mailer.authenticate(function () {
 function sendEmails() {
   dbactions.getGroups(db, function success(list) {
     for (var i = 0; i < list.length; i++) {
-      var statement = db.prepare('SELECT groupurl, name, email, MIN(user_order) FROM users WHERE groupurl=?', list[i].groupurl);
+      var statement = db.prepare('SELECT groupurl, name, email, userid, MIN(user_order) FROM users WHERE groupurl=?', list[i].groupurl);
       statement.get(function (err, user) {
-        // TODO Check if reminder has been sent this week
-        //var statement2 = db.prepare('SELECT * FROM reminders WHERE groupurl=? AND userid=? AND year=? AND week=?');
-        // TODO Check if reminder SHOULD be sent this week (does the group have an exception this week?)
+        if (err) {
+          log('Error fetching current fika responsible for group ' + list[i].groupurl, 'sendReminders.sendEmails');
+          return;
+        }
+        var statementCheckReminderSend = db.prepare('SELECT * FROM reminders WHERE groupurl=? AND userid=? AND year=? AND week=?', user.groupurl, user.userid, year, week);
+        statementCheckReminderSend.get(function (err, reminderHasBeenSent) {
+          if (err) log('Failed checking if reminder has been sent', 'sendReminders.sendEmails');
+          if (!reminderHasBeenSent) {
+            // TODO Check if reminder SHOULD be sent this week (does the group have an exception this week?)
+            var statementCheckIfReminderShouldBeSent = db.prepare('SELECT * FROM skipweeks WHERE groupurl=? AND year=? AND week=?',user.groupurl, year, week);
+            statementCheckIfReminderShouldBeSent.get(function (err, skipThisWeek) {
+              if (err) {
+                log('Failed checking if week should be skipped', 'sendReminders.sendEmails');
+              }
+              if (!skipThisWeek) {
                 sendReminder(user, function (result) {
                   if (result) {
                     log('Email sent to ' + user.name + ' (' + user.email + ')', 'sendReminders.sendEmail');
                     updateDatabaseWithMailInfo(user);
                   }
                   else log('No email sent to ' + user.name, 'sendReminders.sendEmail');
-                });
+                });         
+              }
+            });
+          }
+        });
+        
+
       });  
     }
   }, function error() {
@@ -51,7 +72,10 @@ function sendEmails() {
 function sendReminder(user, callback) {
   if (!user.email) callback(false);
   else if (!validator.isEmail(user.email)) callback(false);
-  else {
+  else if (TESTMODE) {
+    console.log('Mail would have been sent to ' + user.name + ' (' + user.groupurl + ')');
+    callback(true);
+  } else {
     mailer.sendMessage(user.email, 'duharfikat@gmail.com', 'Jobbfikat', 'Hej ' + user.name + '!\n Du har fikat denna vecka!',
     function success() {
       callback(true);
@@ -63,5 +87,11 @@ function sendReminder(user, callback) {
 
 function updateDatabaseWithMailInfo(user) {
   // TODO update table reminders
+  var statementUpdateReminders = db.prepare('INSERT INTO reminders (groupurl, userid, year, week) VALUES (?,?,?,?)', user.groupurl, user.userid, year, week);
+  statementUpdateReminders.run(function (error){
+    if (error) {
+      log('Failed updating reminder table for user ' + JSON.stringify(user), 'sendReminders.updateDatabaseWithMailInfo');
+    }
+  });
   // TODO update table users
 }

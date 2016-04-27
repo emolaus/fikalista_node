@@ -36,7 +36,6 @@ dbactions.getUsers = function(db, groupurl, successCallback, errorCallback) {
   // get current group
   dbactions.getGroup(db, groupurl, function (group) {
     var statement = db.prepare('SELECT * FROM users WHERE groupurl=? ORDER BY user_order ASC', group.groupurl);
-    log('getUsers', 'SELECT * FROM users WHERE groupurl=' + group.groupurl + ' ORDER BY user_order ASC');
     statement.all(function(err, users) {
       if (err) {
         console.log('Error at dbactions.getUsers: db query get users failed for group: ');
@@ -106,7 +105,6 @@ dbactions.deleteUser = function(db, groupurl, userid, successCallback, errorCall
 dbactions.addUser = function(db, groupurl, name, email, successCallback, errorCallback) {
   // TODO get max user_order. Set 100 over. Doesn't work.
   var statement = db.prepare('SELECT MAX(user_order) FROM users WHERE groupurl=?', groupurl);
-  log('addUser', 'SELECT MAX(user_order) FROM users WHERE groupurl=' + groupurl);
   statement.get(function (err, res) {
     if (err) {
       errorCallback(err);
@@ -124,7 +122,6 @@ dbactions.addUser = function(db, groupurl, name, email, successCallback, errorCa
 
 dbactions.editUser = function(db, userid, name, email, successCallback, errorCallback) {
   var statement = db.prepare('UPDATE users SET name=?, email=? WHERE userid=?', name, email, userid);
-  log('editUser', 'UPDATE users SET name=' + name + ', email=' + email + ' WHERE userid=' + userid);
   statement.run(function (err) {
     if (err) errorCallback('Failed updating user.');
     else successCallback();
