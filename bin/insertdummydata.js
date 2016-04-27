@@ -7,8 +7,12 @@ db.serialize(function () {
   db.run("DELETE FROM skipweeks");
   db.run("DELETE FROM groups");
   
+  db.run("INSERT INTO groups (name, groupurl) VALUES ('A group to mail', 'mailgroup')");
   db.run("INSERT INTO groups (name, groupurl) VALUES ('11223', '11223')");
   db.run("INSERT INTO groups (name, groupurl) VALUES ('My test group', 'mygroup')");
+  
+  db.run("INSERT INTO users (groupurl, name, user_order, email) VALUES ('mailgroup', 'Adam', 100, 'contact@mattiasolausson.se')");
+  db.run("INSERT INTO users (groupurl, name, user_order, email) VALUES ('mailgroup', 'Bertil', 200, 'mattiasolausson@volvocars.com')");
   
   db.run("INSERT INTO users (groupurl, name, user_order) VALUES ('11223', 'Ada', 100)");
   db.run("INSERT INTO users (groupurl, name, user_order) VALUES ('11223', 'Beda', 200)");
