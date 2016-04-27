@@ -28,10 +28,16 @@ function sendEmails() {
     for (var i = 0; i < list.length; i++) {
       var statement = db.prepare('SELECT groupurl, name, email, MIN(user_order) FROM users WHERE groupurl=?', list[i].groupurl);
       statement.get(function (err, user) {
-        sendReminder(user, function (result) {
-          if (result) log('Email sent to ' + user.name + ' (' + user.email + ')', 'sendReminders.sendEmail');
-          else log('No email sent to ' + user.name, 'sendReminders.sendEmail');
-        });
+        // TODO Check if reminder has been sent this week
+        //var statement2 = db.prepare('SELECT * FROM reminders WHERE groupurl=? AND userid=? AND year=? AND week=?');
+        // TODO Check if reminder SHOULD be sent this week (does the group have an exception this week?)
+                sendReminder(user, function (result) {
+                  if (result) {
+                    log('Email sent to ' + user.name + ' (' + user.email + ')', 'sendReminders.sendEmail');
+                    updateDatabaseWithMailInfo(user);
+                  }
+                  else log('No email sent to ' + user.name, 'sendReminders.sendEmail');
+                });
       });  
     }
   }, function error() {
@@ -55,4 +61,7 @@ function sendReminder(user, callback) {
   }
 }
 
-
+function updateDatabaseWithMailInfo(user) {
+  // TODO update table reminders
+  // TODO update table users
+}
