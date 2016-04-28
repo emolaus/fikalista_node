@@ -77,7 +77,7 @@ function sendEmails() {
 function sendReminder(user, callback) {
   if (!user.email) callback(false);
   else if (!validator.isEmail(user.email)) callback(false);
-  else if (config.TESTMODE) {
+  else if (config.SEND_EMAIL) {
     console.log('Mail would have been sent to ' + JSON.stringify(user));
     callback(true);
   } else {

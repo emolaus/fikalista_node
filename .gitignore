@@ -3,4 +3,4 @@ npm_modules
 data/*
 logs/*
 npm-debug.log
-client-secret.js
+client_secret.json
