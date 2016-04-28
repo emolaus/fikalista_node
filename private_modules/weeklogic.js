@@ -2,38 +2,37 @@ var weeklogic = {};
 var dbactions = require('../private_modules/dbactions');
 var currentWeekNumber = require('current-week-number');
 var config = require('../config/config');
+var reload = require('require-reload')(require);
 
 weeklogic.userListWithWeeks = function(db, groupurl, successCallback, errorCallback) {
-  // Get group id
-  dbactions.getGroup(db, groupurl, function success(group) {
-    dbactions.getUsers(db, groupurl, function success(users) {
-      // Fetch weeks and assign week to each user.
-      var now = weeklogic.getCurrentWeek();
-      var currentYear =now.year;
-      var currentWeek = now.week();
-      var checkWeek = new Date();
-      var stepWeekMilliseconds = 7 * 24 * 3600 * 1000;
-      dbactions.getWeekExceptions(db, groupurl, currentYear, currentWeek, function success(weeks) {
-        for (var i = 0; i < users.length; i++) {
-          // If checkweek is in the list of week exceptions, step forward.
-          while (weekShouldBeSkipped(checkWeek, weeks)) {
-            checkWeek = new Date(checkWeek.getTime() + stepWeekMilliseconds);
-          }
-          users[i].week = currentWeekNumber(checkWeek);
-          checkWeek = new Date(checkWeek.getTime() + stepWeekMilliseconds);
+
+  dbactions.getUsers(db, groupurl, function success(users) {
+    // Fetch weeks and assign week to each user.
+    var now = weeklogic.getCurrentWeek();
+    var checkYear =now.year;
+    var checkWeek = now.week;
+    dbactions.getWeekExceptions(db, groupurl, checkYear, checkWeek, function success(weeks) {
+      for (var i = 0; i < users.length; i++) {
+        // If checkweek is in the list of week exceptions, step forward.
+        while (weekShouldBeSkipped(checkYear, checkWeek, weeks)) {
+          //checkWeek = new Date(checkWeek.getTime() + stepWeekMilliseconds);
+          var next = weeklogic.getWeekAfter(checkYear, checkWeek);
+          checkYear = next.year;
+          checkWeek = next.week;
         }
-        successCallback(users);
-      }, 
-      errorCallback);
+        users[i].week = checkWeek;
+        var next = weeklogic.getWeekAfter(checkYear, checkWeek);
+        checkYear = next.year;
+        checkWeek = next.week;
+      }
+      successCallback(users);
     }, errorCallback);
-  },
-  errorCallback);
-  // Get complete list
+  }, errorCallback);
 };
 
-function weekShouldBeSkipped(date, weekExceptionList) {
-  var year = date.getFullYear();
-  var week = currentWeekNumber(date);
+function weekShouldBeSkipped(year, week, weekExceptionList) {
+  //var year = date.getFullYear();
+  //var week = currentWeekNumber(date);
   for (var i = 0; i < weekExceptionList.length; i++) {
     if (weekExceptionList[i].year == year && weekExceptionList[i].week == week) {
       return true;
@@ -85,6 +84,12 @@ weeklogic.getNextWeekException = function (db, groupurl, fromYear, fromWeek, cal
 
 weeklogic.getCurrentWeek = function () {
       var now = new Date();
+      // Test mode? Reload week numbers
+      if (config.TESTMODE) {
+        config = null;
+        config = reload('../config/config');
+      }
+      console.log('testweek: ' + config.TESTWEEK);
       var currentYear = config.TESTMODE ? config.TESTYEAR : now.getFullYear();
       var currentWeek = config.TESTMODE ? config.TESTWEEK : currentWeekNumber();
       return {year: currentYear, week: currentWeek};
@@ -94,5 +99,16 @@ weeklogic.getWeekBefore = function (year, week) {
   if (week > 1) return {year: year, week: week - 1};
   var prevYear = year - 1;
   if (week == 1) return {year: prevYear, week: currentWeekNumber(new Date('December 28, ' + prevYear))};
+};
+
+weeklogic.getWeekAfter = function(year, week) {
+  if (week == weeklogic.getLastWeekOfTheYear(year)) {
+    return {year: year + 1, week: 1};
+  }
+  return {year: year, week: week + 1};
+}
+
+weeklogic.getLastWeekOfTheYear = function (year) {
+  return currentWeekNumber(new Date('December 28, ' + year));
 }
 module.exports = weeklogic;

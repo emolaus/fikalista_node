@@ -58,7 +58,6 @@ router.get('/:groupurl/manageusers', function (req, res) {
   
 });
 
-
 router.put('/weekexception/:groupurl/:year/:week', function (req, res) {
   dbactions.addWeekException(req.db, req.params.groupurl, req.params.year, req.params.week, 
     function success() {

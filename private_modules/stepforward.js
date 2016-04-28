@@ -5,11 +5,19 @@ var weeklogic = require('../private_modules/weeklogic.js');
  * Step forward each group
 */
 step.forwardEntireDB = function (db, year, week, callback) {
+  var length; 
+  var countAndReturn = function () {
+    console.log('Remaining calls: ' + --length);
+    if (length == 0) callback();
+  }
+  
   // Then, check if script has run this week. If not, go through each group.
   var s1 = db.prepare('SELECT * FROM updatescriptlastrun WHERE year=? AND week=?', year, week);
   s1.get(function (err, res) {
-    if (err) log('Error fetching from updatescriptlastrun. year: ' + year + ' week:' + week, 'stepforward.forwardEntireDB');
-    else if (!res) {
+    if (err) {
+      log('Error fetching from updatescriptlastrun. year: ' + year + ' week:' + week, 'stepforward.forwardEntireDB');
+      callback();
+    } else if (!res) {
       var s2 = db.prepare('INSERT INTO updatescriptlastrun (year, week) VALUES (?,?)', year, week);
       s2.run(function (err) {
         // TODO backup db.
@@ -19,15 +27,16 @@ step.forwardEntireDB = function (db, year, week, callback) {
         } else { // for each group, step forward
           dbactions.getGroups(db, function success(list) {
             db.serialize(function () {
+              length = list.length;
               for (var i = 0; i < list.length; i++) {
                 var groupurl = list[i].groupurl;
                 step.forward(db, groupurl, year, week, function (res, groupurl) {
                   if (res) console.log('Stepped forward ' + groupurl);
                   else console.log('Failed/skipped stepping forward ' + groupurl);
+                  countAndReturn();
                 });
               }
             });
-            callback();
           }, function error(msg) {
             log('Error fetching groups. error message: ' + msg, 'stepforward.forwardEntireDB');
             callback();
