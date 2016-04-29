@@ -5,7 +5,7 @@ var dbactions = require('../private_modules/dbactions');
 var weeklogic = require('../private_modules/weeklogic');
 var currentWeekNumber = require('current-week-number');
 
-router.get('/:groupurl/mainview', function (req, res, next) {
+router.get('/:groupurl', function (req, res, next) {
     dbactions.getGroup(req.db, req.params.groupurl, 
     function successCallback(group) {
       weeklogic.userListWithWeeks(req.db, req.params.groupurl, 

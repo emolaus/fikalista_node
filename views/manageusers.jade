@@ -22,7 +22,7 @@ body
       div#navbar.navbar-collapse.collapse
         ul.nav.navbar-nav.navbar-right
           li
-            a(href="/#{groupurl}/mainview") Main view
+            a(href="/#{groupurl}") Main view
           li
             a(href="/#{groupurl}/manageweeks") Manage weeks
 
@@ -42,7 +42,7 @@ body
             .form-group
               label(for="addName") Name (should be unique for the group):
               input(type="text" class="form-control" id="addName")
-              label(for="addEmail") Email (optional, for reminders - your work mail probably doesn't work):
+              label(for="addEmail") Email (optional, for reminders):
               input(type="email" class="form-control" id="addEmail")
         .modal-footer
           button(type="button" class="btn btn-default" data-dismiss="modal") Cancel 
@@ -80,7 +80,7 @@ body
             
             label(for="editName") Name (should be unique for the group):
             input(type="text" class="form-control" id="editName")
-            label(for="editEmail") Email (optional, for reminders - your work mail probably doesn't work):
+            label(for="editEmail") Email (optional, for reminders):
             input(type="email" class="form-control" id="editEmail")
         .modal-footer
           button(type="button" class="btn btn-default" data-dismiss="modal") Cancel 
