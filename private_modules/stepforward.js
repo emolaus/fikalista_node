@@ -1,6 +1,7 @@
 var step = {};
 var dbactions = require('../private_modules/dbactions.js');
 var weeklogic = require('../private_modules/weeklogic.js');
+var log = require('../private_modules/mylogger').log;
 /**
  * Step forward each group
 */

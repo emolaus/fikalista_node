@@ -15,6 +15,8 @@ var today = new Date();
 var year = config.TESTMODE ? config.TESTYEAR : today.getFullYear();
 var week = config.TESTMODE ? config.TESTWEEK : currentWeekNumber(today);
 
+log('updateAndSend called', 'updateAndSendReminders.js');
+
 // TODO Step forward each group if not previously done
 step.forwardEntireDB(db, year, week, sendReminders);
 
