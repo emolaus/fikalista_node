@@ -101,6 +101,14 @@ weeklogic.getWeekBefore = function (year, week) {
   if (week == 1) return {year: prevYear, week: currentWeekNumber(new Date('December 28, ' + prevYear))};
 };
 
+weeklogic.stepNWeeksBack = function (year, week, numberOfWeeks) {
+  var yearWeek = {year: year, week: week};
+  for (var i = 0; i < numberOfWeeks; i++) {
+    yearWeek = weeklogic.getWeekBefore(yearWeek.year, yearWeek.week);
+  }
+  return yearWeek;
+};
+
 weeklogic.getWeekAfter = function(year, week) {
   if (week == weeklogic.getLastWeekOfTheYear(year)) {
     return {year: year + 1, week: 1};
