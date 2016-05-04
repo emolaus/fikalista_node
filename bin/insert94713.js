@@ -20,6 +20,6 @@ db.serialize(function () {
   db.run("INSERT INTO users (groupurl, name, user_order, email) VALUES ('94713', 'Tomas', 900, 'contact@mattiasolausson.se')");
   db.run("INSERT INTO users (groupurl, name, user_order, email) VALUES ('94713', 'Ingemar', 1000, 'contact@mattiasolausson.se')");
   
-  db.run("INSERT INTO updatescriptlastrun ('94713', year, week) VALUES (2016, 18)");
+  db.run("INSERT INTO updatescriptlastrun (groupurl, year, week) VALUES ('94713', 2016, 18)");
 
 });
