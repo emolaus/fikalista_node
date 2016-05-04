@@ -5,7 +5,6 @@ var log = require('../private_modules/mylogger').log;
 var async = require('async');
 /**
  * Step forward each group
- * TODO if it was several weeks since update was run, step multiple times
  * 
  * Test sequence
  * set w 15. Should see 15 A, 15 A, 15 A. OK
@@ -15,28 +14,25 @@ var async = require('async');
  * set w 18. step forward. Should see 18 B, 18 A, 19 C and mail to B, A OK database4
  * set w 19. step forward. Should see 19 C, 19 B, 19 C and mail to C, B, C OK database5
  * set w 20. step forward. Should see 20 A, 20 C, 20 A and mail to A, C, A 
- * 
- * TODO Om updatescriptlastrun-raden har en vecka som är mer än en vecka gammal, stega upp
- * ett antal gånger.
- *   - Hämta inte nuvarande vecka, hämta latest updatelastrun
- *   - Stega upp vecka tills vi är på nuvarande.
- *   - ELLER beräkna diff och stega för varje
 */
 step.forwardEntireDB = function (db, year, week, callback) {
+  
   dbactions.getGroups(db, 
     function success(list) {
       async.eachSeries(list, function (group, asyncCallback) {
         var groupurl = group.groupurl;
-        var s1 = db.prepare('SELECT * FROM updatescriptlastrun WHERE groupurl=? AND year=? AND week=?', groupurl, year, week);
-        // Check if this group is already updated this week
-        s1.get(function (err, lastUpdate) {   
+        
+        var s1 = db.prepare('SELECT *,MAX(timestamp) FROM updatescriptlastrun WHERE groupurl=?', groupurl);
+        // Fetch last update
+        s1.get(function (err, lastUpdate) {  
           if (err) {
             // This causes out of sync issues - same guy as last week will be responsible.
             log('Failed fetching updatescriptlastrun row for group ' + groupurl, 'step.forwardEntireDB');
             asyncCallback();
+            return;
           }
-          // !res means the group has not been updated yet.
-          else if (!lastUpdate) {
+          if (!lastUpdate.groupurl) {
+            
             step.forward(db, groupurl, year, week, function (success, groupurl) {
               if (success) {
                 log('Stepped forward ' + groupurl, 'step.forwardEntireDB');
@@ -48,14 +44,53 @@ step.forwardEntireDB = function (db, year, week, callback) {
                 });
               }
               else {
-                log('Skipped stepping forward ' + groupurl,'step.forwardEntireDB');
+                log('Failed stepping forward ' + groupurl,'step.forwardEntireDB');
                 asyncCallback();
               }
             });
-          }
-          // If we arrive here the group had already been updated.
-          else {
-            log('Group ' + groupurl + ' has already been updated this week (year: ' + year + ', week: ' + week, 'step.forwardEntireDB');
+          } else {
+            // TODO all weeks missing
+            var yearFrom = lastUpdate.year;
+            var weekFrom = lastUpdate.week;
+            var diff = weeklogic.getDiffInWeeks(yearFrom, weekFrom, year, week);
+            if (diff == 0) {
+              // Already updated this week.
+               log('Skipped stepping forward ' + groupurl,'step.forwardEntireDB');
+               asyncCallback();
+            }
+            else if (diff < 0) {
+              log('Error checking week diff for group ' + groupurl);
+              asyncCallback();
+            }
+            else {
+              // diff > 0. For each, update.
+              var arrayOfDiffLength = new Array(diff);
+              var tmpyearweek = {year: yearFrom, week: weekFrom};
+              for (var i = 0; i < diff; i++) {
+                tmpyearweek = weeklogic.getWeekAfter(tmpyearweek.year, tmpyearweek.week);
+                arrayOfDiffLength[i] = {year: tmpyearweek.year, week: tmpyearweek.week};
+              }
+              async.eachSeries(arrayOfDiffLength, function (yearweek, asyncCallback2) {
+                step.forward(db, groupurl, yearweek.year, yearweek.week, function (success, groupurl) {
+                  if (success) {
+                    log('Stepped forward ' + groupurl, 'step.forwardEntireDB');
+                    // Update updatescriptlastrun
+                    var s2 = db.prepare('INSERT INTO updatescriptlastrun (groupurl, year, week) VALUES (?,?,?)', groupurl, yearweek.year, yearweek.week);
+                    s2.run(function (err) {
+                      if (err) log('Failed inserting row into updatescriptlastrun for group '+ groupurl, 'step.forwardEntireDB');
+                      asyncCallback2();
+                    });
+                  }
+                  else {
+                    log('Failed stepping forward ' + groupurl,'step.forwardEntireDB');
+                    asyncCallback2();
+                  }
+                });
+              }, function done() {
+                log('Multiple steps forward for group ' + groupurl);
+                asyncCallback();
+              });
+            }
           }
         });
       }, function done() {
@@ -63,12 +98,12 @@ step.forwardEntireDB = function (db, year, week, callback) {
       }); // end async callback
       
     }, function error(msg) {
-    log('Error fetching groups. error message: ' + msg, 'stepforward.forwardEntireDB');
-    callback();
+      log('Error fetching groups. error message: ' + msg, 'stepforward.forwardEntireDB');
+      callback();
   });
 };
 /** 
- * Step forward 1 group if not done since last successful fika 
+ * Step forward 1 group, 1 week if not done since last successful fika 
  * If we're in week 17 and there was an exception last week - do not step forward.
 */
 step.forward = function (db, groupurl, year, week, callback) {

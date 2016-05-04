@@ -119,4 +119,27 @@ weeklogic.getWeekAfter = function(year, week) {
 weeklogic.getLastWeekOfTheYear = function (year) {
   return currentWeekNumber(new Date('December 28, ' + year));
 }
+/**
+ * example
+ * weeklogic.getDiffInWeeks(2016, 1, 2015, 53) => -1
+ * weeklogic.getDiffInWeeks(2016, 10, 2016, 12) => 2
+*/
+weeklogic.getDiffInWeeks = function(yearFrom, weekFrom, yearTo, weekTo) {
+  if (yearFrom == yearTo && weekFrom == weekTo) return 0;
+  var stepper, direction, diff = 0;
+  if ((yearFrom*100 + weekFrom) < (yearTo*100 + weekTo)) {
+    stepper = weeklogic.getWeekAfter;
+    direction = 1;
+  } else {
+    stepper = weeklogic.getWeekBefore;
+    direction = -1;
+  }
+  // TODO step forward until same
+  var current = {year: yearFrom, week: weekFrom};
+  while (!(yearTo==current.year && weekTo == current.week) ) {
+    current = stepper(current.year, current.week);
+    diff++;
+  }
+  return direction * diff;
+};
 module.exports = weeklogic;
