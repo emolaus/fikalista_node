@@ -39,9 +39,11 @@ db.run("CREATE TABLE reminders (" +
         ")"); 
         
 db.run("CREATE TABLE updatescriptlastrun (" +
+        "groupurl TEXT NOT NULL," + 
         "year INTEGER," + 
         "week INTEGER," +
-        "timestamp INTEGER DEFAULT CURRENT_TIMESTAMP NOT NULL" +
+        "timestamp INTEGER DEFAULT CURRENT_TIMESTAMP NOT NULL," +
+        "FOREIGN KEY (groupurl) REFERENCES groups(groupurl)" +
         ")");
         
 db.close();

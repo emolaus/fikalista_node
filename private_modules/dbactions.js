@@ -134,7 +134,6 @@ dbactions.checkReminder = function(db, groupurl, userid, year, week, successCall
       console.log(err);
       log('checkReminder', 'Failed finding reminder.');
     }
-    console.log(row);
     successCallback(row);
   });
 };
