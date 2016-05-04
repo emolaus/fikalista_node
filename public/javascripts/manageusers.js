@@ -47,6 +47,19 @@ $(document).ready(function () {
     }).done(function (error){
       if (!error) location.reload();
     });
+  });
+  
+  $('#switchWeeksButton').click(function () {
+    var selectedUser1 = $('#selectUser1').find(':selected');
+    var selectedUser2 = $('#selectUser2').find(':selected');
+    if (selectedUser1.val() == '' || selectedUser2.val() == '') return;
+    $.ajax({
+      url: '/restapi/switchweeks/'+ groupurl + '/' + selectedUser1.val() + '/' + selectedUser2.val(),
+      type: 'PUT'
+    }).done(function (error){
+      if (!error) location.reload();
+      else console.log(error);
+    });
     
   });
 });

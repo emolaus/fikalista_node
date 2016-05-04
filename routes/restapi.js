@@ -59,4 +59,17 @@ router.get('/users/:groupurl', function (req, res, next) {
     });
 });
 
+router.put('/switchweeks/:groupurl/:id1/:id2', function (req, res, next) {
+  dbactions.switchWeeks(
+    req.db,
+    req.params.groupurl,
+    req.params.id1, 
+    req.params.id2,
+    function success() {
+      res.send();
+    },
+    function error(msg) {
+      res.send(msg);
+    });
+});
 module.exports = router;

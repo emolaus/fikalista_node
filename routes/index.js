@@ -46,8 +46,6 @@ router.get('/:groupurl/manageweeks', function (req, res) {
 
 router.get('/:groupurl/manageusers', function (req, res) {
   dbactions.getUsers(req.db, req.params.groupurl, function success(allUsers) {
-    
-    console.log(allUsers);
     res.render('manageusers', {
       groupurl: req.params.groupurl,
       allUsers: allUsers
@@ -88,7 +86,6 @@ router.delete('/user/:groupurl/:userid', function (req, res) {
 router.put('/adduser/:groupurl/:name/:email?', function (req, res) {
   var email = req.params.email;
   if (!email) email = null;
-  console.log('req.params:'); console.log(req.params);
   dbactions.addUser(req.db, req.params.groupurl, req.params.name, email, 
   function success() {
     res.send();

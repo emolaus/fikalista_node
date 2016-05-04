@@ -139,13 +139,52 @@ dbactions.checkReminder = function(db, groupurl, userid, year, week, successCall
 };
 
 /**
- *
+ * This is working but it's not elegant. I just don't know how
+ * to work with serialize + transactions. 
  */
-dbactions.changeWeeks = function (db, useridA, useridB, successCallback, errorCallback) {
+dbactions.switchWeeks = function (db, groupurl, userid1, userid2, successCallback, errorCallback) {
   // Check so that users belong to same group
   // 3 changes to DB so use transaction:
   // get user_order for both users
   // switch user_order
   // update groups(year, week, userid)
+  var s1 = db.prepare('SELECT * FROM users where groupurl=? AND (userid=? OR userid=?)', groupurl, userid1, userid2);
+  s1.all(function (err, users) {
+    if (err) {
+      errorCallback(err);
+      return;
+    }
+    if (users.length != 2) {
+      errorCallback('Found wrong number of users.');
+      log('changeWeeks', 'Found wrong number of users. groupurl: ' + groupurl + ' userid1: ' + userid1 + ' userid2: ' + userid2);
+      return;
+    }
+    var user1 = users[0].userid == userid1 ? users[0] : users[1];
+    var user2 = users[1].userid == userid2 ? users[1] : users[0];
+    // At this point we're good to go.
+    db.run('BEGIN');
+    var s2 = db.prepare('UPDATE users SET user_order=? WHERE userid=?', user2.user_order, user1.userid);
+    s2.run(function (error) {
+      if (error) {
+        log('switchWeeks', 'error at switch 1: ' + error);
+        log('switchWeeks', 'continued. groupurl: ' + groupurl + ' userid1: ' + userid1 + ' userid2: ' + userid2);
+        db.run('ROLLBACK');
+        errorCallback('Failed updating in database for user 1');
+      } else {
+        var s3 = db.prepare('UPDATE users SET user_order=? WHERE userid=?', user1.user_order, user2.userid);
+        s3.run(function (error) {
+          if (error) {
+            log('switchWeeks', 'error at switch 2: ' + error);
+            log('switchWeeks', 'continued. groupurl: ' + groupurl + ' userid1: ' + userid1 + ' userid2: ' + userid2)
+            db.run('ROLLBACK');
+            errorCallback('Failed updating in database for user 2');
+            return;
+          } 
+          db.run('COMMIT');
+          successCallback();
+        });
+      }
+    });
+  });
 };
 module.exports = dbactions;

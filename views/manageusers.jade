@@ -29,7 +29,7 @@ body
   button(type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#addUserModal") Add user
   button(type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#removeUserModal") Remove user
   button(type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#editUserModal") Edit user
-  button(type="button" class="btn btn-primary btn-block") Change weeks between users 
+  button(type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#switchWeeksModal") Change weeks between users
 
   div(class="modal fade" id="addUserModal" role="dialog")
     div(class="modal-dialog")
@@ -85,6 +85,28 @@ body
         .modal-footer
           button(type="button" class="btn btn-default" data-dismiss="modal") Cancel 
           button(type="button" class="btn btn-default" id="editUserButton") Save
+
+  div(class="modal fade" id="switchWeeksModal" role="dialog")
+    div(class="modal-dialog")
+      .modal-content
+        .modal-header
+          button(type="button" class="close" data-dismiss="modal") 
+          h4.modal-title Switch weeks
+        .modal-body
+          .form-group
+            label(for="selectUser1") Select user:
+            select(class="form-control" id="selectUser1")
+              option(class="editUser" value="")
+              each user in allUsers
+                option(class="editUser" value="#{user.userid}") #{user.name}
+            label(for="selectUser2") Select the other user:
+            select(class="form-control" id="selectUser2")
+              option(class="editUser" value="")
+              each user in allUsers
+                option(class="editUser" value="#{user.userid}") #{user.name}
+        .modal-footer
+          button(type="button" class="btn btn-default" data-dismiss="modal") Cancel 
+          button(type="button" class="btn btn-default" id="switchWeeksButton") Do it
                     
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js")
   script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js")
