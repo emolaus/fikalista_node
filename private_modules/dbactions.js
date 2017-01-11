@@ -92,12 +92,21 @@ dbactions.deleteWeekException = function(db, groupurl, weekid, successCallback, 
 };
 
 dbactions.deleteUser = function(db, groupurl, userid, successCallback, errorCallback) {
-  var statement = db.prepare('DELETE FROM users WHERE groupurl=? AND userid=?', groupurl, userid);
-  log('deleteUser', 'DELETE FROM users WHERE groupurl=' + groupurl + ' AND userid=' + userid);
-  statement.run(function (err) {
+  // begin with deleting the reminders, or foreign key constraints will block delete statement
+  log('deleteUser', 'DELETE FROM reminders WHERE groupurl=' + groupurl + ' AND userid=' + userid);
+  var clearRemindersStatement = db.prepare('DELETE FROM reminders WHERE groupurl=? AND userid=?', groupurl, userid);
+  clearRemindersStatement.run(function (err) {
     if (err) errorCallback('Failed deleting user.');
-    else successCallback();
+    else {
+      var deleteUserStatement = db.prepare('DELETE FROM users WHERE groupurl=? AND userid=?', groupurl, userid);
+      log('deleteUser', 'DELETE FROM users WHERE groupurl=' + groupurl + ' AND userid=' + userid);
+      deleteUserStatement.run(function (err) {
+        if (err) errorCallback('Failed deleting user.');
+        else successCallback();
+      });      
+    }
   });
+  
 };
 
 dbactions.addUser = function(db, groupurl, name, email, successCallback, errorCallback) {
